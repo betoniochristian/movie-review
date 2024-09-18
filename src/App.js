@@ -78,7 +78,6 @@ function App() {
             <Route path="/movie/:id" element={<MovieDetails />} />
             <Route path="/tv/:id" element={<TvShowDetails />} />
             <Route path="/search" element={<SearchResult />} />
-            
           </Routes>
         </div>
       </div>

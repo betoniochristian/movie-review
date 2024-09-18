@@ -1,23 +1,27 @@
-import React, {useEffect} from 'react'
-import './App.css'
+import React from 'react'
+import { Link } from 'react-router-dom';
 
-function TopList({currentSection, onHandleChange}){
+function TopList({ currentSection, onHandleChange }) {
     const onHandleClick = (sec) => {
-        if(onHandleChange){
-            onHandleChange(sec)
-        }else{
-            console.error('onNavChange prop is not provided')
+        if (onHandleChange) {
+            onHandleChange(sec);
+        } else {
+            console.error('onNavChange prop is not provided');
         }
-    }
-    
-    return(
+    };
+
+    return (
         <div className="list-tm">
             <nav className="list-tm-container">
-                <a href="#movie" className={`mov-tv ${currentSection === "Movie" ? "active" : ''} `} onClick={() => onHandleClick('Movie')}><i class="bi bi-play-circle-fill"></i>Movie</a>
-                <a href="#tvshow" className={`mov-tv ${currentSection === "TVShow" ? "active" : ''} `} onClick={() => onHandleClick('TVShow')}><i class="bi bi-tv-fill"></i>TV Show</a>
+                <Link to="#top-movie" className={`mov-tv ${currentSection === "Movie" ? "active" : ''}`} onClick={() => onHandleClick('Movie')}>
+                    <i className="bi bi-play-circle-fill"></i>Movie
+                </Link>
+                <Link to="#top-tvshow" className={`mov-tv ${currentSection === "TVShow" ? "active" : ''}`} onClick={() => onHandleClick('TVShow')}>
+                    <i className="bi bi-tv-fill"></i>TV Show
+                </Link>
             </nav>
         </div>
-    )
+    );
 }
 
 export default TopList;
