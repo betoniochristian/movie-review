@@ -1,5 +1,6 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+// src/App.js
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Nav from './Nav';
 import Home from './Home';
 import MovieDetails from './MovieDetails'; 
@@ -75,7 +76,7 @@ function App() {
             <Route path="/movie/:id" element={<MovieDetails />} />
             <Route path="/tv/:id" element={<TvShowDetails />} />
             <Route path="/search" element={<SearchResult />} />
-            <Route path="*" element={<Navigate to="/" />} /> {/* Redirects to Home for any unknown routes */}
+            <Route path="*" element={<Home />} /> {/* Default route to Home */}
           </Routes>
         </div>
       </div>
