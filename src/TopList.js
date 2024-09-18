@@ -13,10 +13,10 @@ function TopList({ currentSection, onHandleChange }) {
     return (
         <div className="list-tm">
             <nav className="list-tm-container">
-                <Link to="#top-movie" className={`mov-tv ${currentSection === "Movie" ? "active" : ''}`} onClick={() => onHandleClick('Movie')}>
+                <Link to="#top-movie" className={`mov-tv ${currentSection === "Movie" ? "active" : ''}`} onClick={(e) => {e.preventDefault(); onHandleClick('Movie');}}>
                     <i className="bi bi-play-circle-fill"></i>Movie
                 </Link>
-                <Link to="#top-tvshow" className={`mov-tv ${currentSection === "TVShow" ? "active" : ''}`} onClick={() => onHandleClick('TVShow')}>
+                <Link to="#top-tvshow" className={`mov-tv ${currentSection === "TVShow" ? "active" : ''}`} onClick={(e) => {e.preventDefault(); onHandleClick('TVShow');}}>
                     <i className="bi bi-tv-fill"></i>TV Show
                 </Link>
             </nav>
