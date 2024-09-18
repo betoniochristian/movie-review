@@ -1,7 +1,5 @@
-// src/App.js
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Nav from './Nav';
 import Home from './Home';
 import MovieDetails from './MovieDetails'; 
@@ -41,7 +39,7 @@ function App() {
             <i className="bi bi-arrow-left">Close Menu</i>
           </button>
           <ul>
-            <Link className="a-hover" to="/home" onClick={handleClick}>Home</Link>
+            <Link className="a-hover" to="/" onClick={handleClick}>Home</Link>
             <Link className="a-hover" to="/movies" onClick={handleClick}>Movies</Link>
             <Link className="a-hover" to="/tv-shows" onClick={handleClick}>TV Shows</Link>
             <Link className="a-hover" to="/top-imdb" onClick={handleClick}>Top IMDB</Link>
@@ -62,7 +60,8 @@ function App() {
         <div className={`overlay ${isMenuOpen ? 'overlay-open' : ''}`} onClick={toggleMenu}></div>
         <div className="main-content">
           <Routes>
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} /> 
             <Route path="/action" element={<Action />} />
             <Route path="/drama" element={<Drama />} />
             <Route path="/horror" element={<Horror />} />
@@ -77,7 +76,7 @@ function App() {
             <Route path="/movie/:id" element={<MovieDetails />} />
             <Route path="/tv/:id" element={<TvShowDetails />} />
             <Route path="/search" element={<SearchResult />} />
-            <Route path="*" element={<Home />} /> {/* Default route to Home */}
+            <Route path="*" element={<Home />} /> 
           </Routes>
         </div>
       </div>
