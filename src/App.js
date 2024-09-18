@@ -41,7 +41,7 @@ function App() {
             <i className="bi bi-arrow-left">Close Menu</i>
           </button>
           <ul>
-            <Link className="a-hover" to="/" onClick={handleClick}>Home</Link>
+            <Link className="a-hover" to="/home" onClick={handleClick}>Home</Link>
             <Link className="a-hover" to="/movies" onClick={handleClick}>Movies</Link>
             <Link className="a-hover" to="/tv-shows" onClick={handleClick}>TV Shows</Link>
             <Link className="a-hover" to="/top-imdb" onClick={handleClick}>Top IMDB</Link>
@@ -62,7 +62,7 @@ function App() {
         <div className={`overlay ${isMenuOpen ? 'overlay-open' : ''}`} onClick={toggleMenu}></div>
         <div className="main-content">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/action" element={<Action />} />
             <Route path="/drama" element={<Drama />} />
             <Route path="/horror" element={<Horror />} />
