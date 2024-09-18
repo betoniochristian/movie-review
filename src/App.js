@@ -1,6 +1,7 @@
 // src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Nav from './Nav';
 import Home from './Home';
 import MovieDetails from './MovieDetails'; 
