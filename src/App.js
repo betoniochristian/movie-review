@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Nav from './Nav';
 import Home from './Home';
 import MovieDetails from './MovieDetails'; 
@@ -61,7 +61,7 @@ function App() {
         <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} /> 
+            <Route path="/home" element={<Home />} />
             <Route path="/action" element={<Action />} />
             <Route path="/drama" element={<Drama />} />
             <Route path="/horror" element={<Horror />} />
@@ -76,7 +76,7 @@ function App() {
             <Route path="/movie/:id" element={<MovieDetails />} />
             <Route path="/tv/:id" element={<TvShowDetails />} />
             <Route path="/search" element={<SearchResult />} />
-            <Route path="*" element={<Home />} /> 
+            <Route path="*" element={<Home />} />
           </Routes>
         </div>
       </div>
