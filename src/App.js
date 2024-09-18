@@ -39,6 +39,7 @@ function App() {
             <i className="bi bi-arrow-left">Close Menu</i>
           </button>
           <ul>
+            <Link className="a-hover" to="/" onClick={handleClick}></Link>
             <Link className="a-hover" to="/" onClick={handleClick}>Home</Link>
             <Link className="a-hover" to="/movies" onClick={handleClick}>Movies</Link>
             <Link className="a-hover" to="/tv-shows" onClick={handleClick}>TV Shows</Link>
