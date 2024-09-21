@@ -9,6 +9,10 @@ function TopTv() {
   const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [savedTvShows, setSavedTvShows] = useState(() => {
+    const saved = localStorage.getItem('savedTvShows');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -25,6 +29,17 @@ function TopTv() {
     fetchMovies();
   }, [currentPage]);
 
+  const toggleSaveMovie = (movieId) => {
+    const isMovieSaved = savedTvShows.includes(movieId);
+    const updatedSavedTvShows = isMovieSaved
+      ? savedTvShows.filter((id) => id !== movieId)
+      : [...savedTvShows, movieId];
+
+    setSavedTvShows(updatedSavedTvShows);
+    localStorage.setItem('savedTvShows', JSON.stringify(updatedSavedTvShows));
+  };
+
+  const isSaved = (movieId) => savedTvShows.includes(movieId);
 
   const formatStar = (rating) => {
     return rating ? rating.toFixed(1) : 'N/A';
@@ -60,7 +75,7 @@ function TopTv() {
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          <i class="bi bi-chevron-left"></i>
+          <i className="bi bi-chevron-left"></i>
         </button>
 
         {Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index).map(page => (
@@ -73,12 +88,11 @@ function TopTv() {
           </button>
         ))}
 
-       
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
-          <i class="bi bi-chevron-right"></i>
+          <i className="bi bi-chevron-right"></i>
         </button>
       </div>
     );
@@ -87,38 +101,62 @@ function TopTv() {
   return (
     <div className="top-movie-list" id="top-tvshow">
       {renderPagination()}
-    <div className="movie-list3">
-      {movies.length > 0 ? (
-        <>
-          {movies.map((movie) => (
-            <Link key={movie.id} to={`/tv/${movie.id}`} className="movie-item-link3">
-              <div className="movie-item3">
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.name}
-                />
+      <div className="movie-list3">
+        {movies.length > 0 ? (
+          <>
+            {movies.map((movie) => (
+              <div key={movie.id} className="movie-item3">
+                {/* Link wrapping only the image */}
+                <Link to={`/tv/${movie.id}`} className="movie-item-link3">
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.name}
+                  />
+                </Link>
+
                 <div className="info-movie3">
                   <div className="info-row3">
                     <p><i className="bi bi-star-fill"></i> {formatStar(movie.vote_average)}</p>
-                    <p><i className="bi bi-calendar3-week-fill"></i> {formatDate(movie.release_date)}</p>
+                    <p><i className="bi bi-calendar3-week-fill"></i> {formatDate(movie.first_air_date)}</p>
                   </div>
+
                   <div className="mov-title3">
                     <h4>{movie.name}</h4>
+
+                    <div className="bookmark-button">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleSaveMovie(movie.id);
+                        }}
+                        className="bookmark-btn"
+                      >
+                        {isSaved(movie.id) ? (
+                          <i className="bi bi-bookmark-fill"></i>
+                        ) : (
+                          <i className="bi bi-bookmark"></i>
+                        )}
+                      </button>
+                    </div>
                   </div>
+
+                  {/* Link wrapping only the See more button */}
                   <div className="for-button3">
-                    <button><i className="bi bi-eye"></i> See more</button>
+                    <Link to={`/tv/${movie.id}`}>
+                      <button>
+                        <i className="bi bi-eye"></i> See more
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>
-            </Link>
-          ))}
-        </>
-      ) : (
-        <p>Loading movies...</p>
-      )}
-    </div>
-
-    {renderPagination()}
+            ))}
+          </>
+        ) : (
+          <p>Loading movies...</p>
+        )}
+      </div>
+      {renderPagination()}
     </div>
   );
 }

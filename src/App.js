@@ -16,6 +16,8 @@ import History from './History';
 import Science from './Science';
 import Thriller from './Thriller';
 import War from './War';
+import Watchlist from './Watchlist'
+import WatchlistTv from './WatchlistTv'
 import './App.css';
 
 function App() {
@@ -44,6 +46,8 @@ function App() {
             <Link className="a-hover" to="/movies" onClick={handleClick}>Movies</Link>
             <Link className="a-hover" to="/tv-shows" onClick={handleClick}>TV Shows</Link>
             <Link className="a-hover" to="/top-imdb" onClick={handleClick}>Top IMDB</Link>
+            <Link className="a-hover" to="/watchlist" onClick={handleClick}>WatchList</Link>
+            <Link className="a-hover" to="/watchlisttv" onClick={handleClick}>WatchList Tv</Link>
           </ul>
           <p className="genre-real">Genre</p>
           <div className="genre-div">
@@ -78,6 +82,8 @@ function App() {
             <Route path="/movie/:id" element={<MovieDetails />} />
             <Route path="/tv/:id" element={<TvShowDetails />} />
             <Route path="/search" element={<SearchResult />} />
+            <Route path="/watchlist" element={<Watchlist />} />
+            <Route path="/watchlisttv" element={<WatchlistTv />} />
           </Routes>
         </div>
       </div>

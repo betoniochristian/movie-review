@@ -9,6 +9,10 @@ function TvShowDetails() {
   const [trailer, setTrailer] = useState(null);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const [similarShows, setSimilarShows] = useState([]);
+  const [savedTvShows, setSavedTvShows] = useState(() => {
+    const saved = localStorage.getItem('savedTvShows');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
     // Reset the state when ID changes
@@ -78,6 +82,19 @@ function TvShowDetails() {
     return <p>Loading TV show details...</p>;
   }
 
+
+  const toggleSaveMovie = (movieId) => {
+    const isMovieSaved = savedTvShows.includes(movieId);
+    const updatedSavedTvShows = isMovieSaved
+      ? savedTvShows.filter((id) => id !== movieId)
+      : [...savedTvShows, movieId];
+
+    setSavedTvShows(updatedSavedTvShows);
+    localStorage.setItem('savedTvShows', JSON.stringify(updatedSavedTvShows));
+  };
+
+  const isSaved = (movieId) => savedTvShows.includes(movieId);
+
   // Add conditional check to avoid undefined vote_average
   const formatRate = (rate) => {
     return rate ? rate.toFixed(1) : 'N/A';
@@ -107,6 +124,19 @@ function TvShowDetails() {
             <div className="over-titles">
               <p><i className="bi bi-calendar3-week-fill"></i> {new Date(tvShow.first_air_date).toLocaleDateString()}</p>
               <p><i className="bi bi-star-fill"></i> {formatRate(tvShow.vote_average)}</p>
+              <div className="bookmark-button">
+                    <button onClick={(e) => {
+                      e.stopPropagation(); 
+                      toggleSaveMovie(tvShow.id);
+                    }} className="bookmark-btn">
+                      {isSaved(tvShow.id) ? (
+                        <i className="bi bi-bookmark-fill"></i> 
+                      ) : (
+                        <i className="bi bi-bookmark"></i>
+                      )}
+                    </button>
+                  </div>
+              
             </div>
             <div className="over-overview">
               <p>{tvShow.overview || 'No overview available.'}</p>
@@ -156,38 +186,61 @@ function TvShowDetails() {
       </div>
       
       <div className='similar-like'>
-  <div className="movie-list5">
-    {similarShows.length > 0 ? (
-      similarShows.map((tvShow) => (
-        <Link key={tvShow.id} to={`/tv/${tvShow.id}`} className="movie-item-link2">
-          <div className="movie-item2">
-            <img
-              src={tvShow.poster_path ? `https://image.tmdb.org/t/p/w500${tvShow.poster_path}` : '/placeholder-image.jpg'}
-              alt={tvShow.name || 'No Title Available'}
-            />
-            <div className="info-movie2">
-              <div className="info-row2">
-                {/* Handle missing rating or date data */}
-                <p><i className="bi bi-star-fill"></i> {tvShow.vote_average ? formatRate(tvShow.vote_average) : 'N/A'}</p>
-                <p><i className="bi bi-calendar3-week-fill"></i> {tvShow.first_air_date ? new Date(tvShow.first_air_date).toLocaleDateString() : 'Unknown'}</p>
-              </div>
-              <div className="mov-title2">
-                <h4>{tvShow.name || 'No Title Available'}</h4>
-              </div>
-              <div className="for-button2">
-                <button>
-                  <i className="bi bi-eye"></i> See more
-                </button>
-              </div>
-            </div>
+          <div className="movie-list5">
+            {similarShows.length > 0 ? (
+              similarShows.map((tvShow) => (
+                <div key={tvShow.id} className="movie-item2">
+                  {/* Link wrapping only the image */}
+                  <Link to={`/tv/${tvShow.id}`} className="movie-item-link2">
+                    <img
+                      src={tvShow.poster_path ? `https://image.tmdb.org/t/p/w500${tvShow.poster_path}` : '/placeholder-image.jpg'}
+                      alt={tvShow.name || 'No Title Available'}
+                    />
+                  </Link>
+
+                  <div className="info-movie2">
+                    <div className="info-row2">
+                      {/* Handle missing rating or date data */}
+                      <p><i className="bi bi-star-fill"></i> {tvShow.vote_average ? formatRate(tvShow.vote_average) : 'N/A'}</p>
+                      <p><i className="bi bi-calendar3-week-fill"></i> {tvShow.first_air_date ? new Date(tvShow.first_air_date).toLocaleDateString() : 'Unknown'}</p>
+                    </div>
+
+                    <div className="mov-title2">
+                      <h4>{tvShow.name || 'No Title Available'}</h4>
+                      <div className="bookmark-button">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleSaveMovie(tvShow.id);
+                          }}
+                          className="bookmark-btn"
+                        >
+                          {isSaved(tvShow.id) ? (
+                            <i className="bi bi-bookmark-fill"></i>
+                          ) : (
+                            <i className="bi bi-bookmark"></i>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Link wrapping the See More button */}
+                    <div className="for-button2">
+                      <Link to={`/tv/${tvShow.id}`}>
+                        <button>
+                          <i className="bi bi-eye"></i> See more
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>Loading similar TV shows...</p>
+            )}
           </div>
-        </Link>
-      ))
-    ) : (
-      <p>Loading similar TV shows...</p>
-    )}
-  </div>
-</div>
+        </div>
+
 
 
 

@@ -9,6 +9,10 @@ function MovieDetail() {
   const [trailer, setTrailer] = useState(null);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const [similarMovies, setSimilarMovies] = useState([]);
+  const [savedMovies, setSavedMovies] = useState(() => {
+    const saved = localStorage.getItem('savedMovies');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
@@ -72,6 +76,19 @@ function MovieDetail() {
     return <p>Loading movie details...</p>;
   }
 
+  const toggleSaveMovie = (movieId) => {
+    const isMovieSaved = savedMovies.includes(movieId);
+    const updatedSavedMovies = isMovieSaved
+      ? savedMovies.filter((id) => id !== movieId)
+      : [...savedMovies, movieId];
+
+    setSavedMovies(updatedSavedMovies);
+    localStorage.setItem('savedMovies', JSON.stringify(updatedSavedMovies));
+  };
+
+  const isSaved = (movieId) => savedMovies.includes(movieId);
+
+
   const formatTime = (time) => {
     if(time < 60){
         return `${time}m`
@@ -107,12 +124,25 @@ function MovieDetail() {
                         <div className="over-content">
                             <div className="over-details">
                                 <h2>{movie.title}</h2>
+                                
                             </div>
 
                             <div className="over-titles">
                                 <p><i className="bi bi-calendar3-week-fill"></i> {new Date(movie.release_date).toLocaleDateString()}</p>
                                 <p><i className="bi bi-star-fill"></i> {formatRate(movie.vote_average)}</p>
                                 <p><i className="bi bi-clock-fill"></i> {formatTime(movie.runtime)}</p>
+                                <div className="bookmark-button">
+                                <button onClick={(e) => {
+                                  e.stopPropagation(); 
+                                  toggleSaveMovie(movie.id);
+                                }} className="bookmark-btn">
+                                  {isSaved(movie.id) ? (
+                                    <i className="bi bi-bookmark-fill"></i> 
+                                  ) : (
+                                    <i className="bi bi-bookmark"></i>
+                                  )}
+                                </button>
+                              </div>
                             </div>
                             <div className="over-overview">
                                 <p>{movie.overview}</p>
@@ -158,37 +188,60 @@ function MovieDetail() {
                             <div className="line1"></div>
                             <span className="trending-title1">You may also like</span>
                     </div>
-                <div className='similar-like'>
-                    <div className="movie-list2">
-                          {similarMovies.length > 0 ? (
-                            similarMovies.map((movie) => (
-                              <Link key={movie.id} to={`/movie/${movie.id}`} className="movie-item-link2">
-                                <div className="movie-item2">
-                                  <img
-                                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                                    alt={movie.title}
-                                  />
-                                  <div className="info-movie2">
-                                    <div className="info-row2">
-                                      <p><i className="bi bi-star-fill"></i> {formatRate(movie.vote_average)}</p>
-                                      <p><i className="bi bi-calendar3-week-fill"></i> {new Date(movie.release_date).toLocaleDateString()}</p>
-                                    </div>
-                                    <div className="mov-title2">
-                                      <h4>{movie.title}</h4>
-                                    </div>
-                                    <div className="for-button2">
-                                      <button className=""><i className="bi bi-eye"></i> See more</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </Link>
-                            ))
-                                    ) : (
-                        <p>Loading similar movies...</p>
-                      )}
-                    </div>
 
-      </div>
+                <div className='similar-like'>
+                <div className="movie-list2">
+                  {similarMovies.length > 0 ? (
+                    similarMovies.map((movie) => (
+                      <div key={movie.id} className="movie-item2">
+                        <Link to={`/movie/${movie.id}`} className="movie-item-link2">
+                          <img
+                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                            alt={movie.title}
+                          />
+                        </Link>
+
+                        <div className="info-movie2">
+                          <div className="info-row2">
+                            <p><i className="bi bi-star-fill"></i> {formatRate(movie.vote_average)}</p>
+                            <p><i className="bi bi-calendar3-week-fill"></i> {new Date(movie.release_date).toLocaleDateString()}</p>
+                          </div>
+
+                          <div className="mov-title2">
+                            <h4>{movie.title}</h4>
+                            <div className="bookmark-button">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleSaveMovie(movie.id);
+                                }}
+                                className="bookmark-btn"
+                              >
+                                {isSaved(movie.id) ? (
+                                  <i className="bi bi-bookmark-fill"></i>
+                                ) : (
+                                  <i className="bi bi-bookmark"></i>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Link wrapping the See More button */}
+                          <div className="for-button2">
+                            <Link to={`/movie/${movie.id}`}>
+                              <button className="">
+                                <i className="bi bi-eye"></i> See more
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Loading similar movies...</p>
+                  )}
+                </div>
+              </div>
 
     </div>
   );

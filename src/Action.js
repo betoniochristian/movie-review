@@ -9,6 +9,10 @@ function Action() {
   const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [savedMovies, setSavedMovies] = useState(() => {
+    const saved = localStorage.getItem('savedMovies');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -24,6 +28,18 @@ function Action() {
     };
     fetchMovies();
   }, [currentPage]);
+
+  const toggleSaveMovie = (movieId) => {
+    const isMovieSaved = savedMovies.includes(movieId);
+    const updatedSavedMovies = isMovieSaved
+      ? savedMovies.filter((id) => id !== movieId)
+      : [...savedMovies, movieId];
+
+    setSavedMovies(updatedSavedMovies);
+    localStorage.setItem('savedMovies', JSON.stringify(updatedSavedMovies));
+  };
+
+  const isSaved = (movieId) => savedMovies.includes(movieId);
 
   const formatStar = (rating) => {
     return rating ? rating.toFixed(1) : 'N/A';
@@ -59,7 +75,7 @@ function Action() {
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          <i class="bi bi-chevron-left"></i>
+          <i className="bi bi-chevron-left"></i>
         </button>
 
         {Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index).map(page => (
@@ -72,34 +88,36 @@ function Action() {
           </button>
         ))}
 
-       
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
-          <i class="bi bi-chevron-right"></i>
+          <i className="bi bi-chevron-right"></i>
         </button>
       </div>
     );
   };
 
   return (
-    <div className="">
+    <div>
       <div className="list-movie">
         <div className="line1"></div>
         <span className="trending-title4">Action Movies</span>
       </div>
       {renderPagination()}
-    <div className="movie-list4">
-      {movies.length > 0 ? (
-        <>
-          {movies.map((movie) => (
-            <Link key={movie.id} to={`/movie/${movie.id}`} className="movie-item-link4">
-              <div className="movie-item4">
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title}
-                />
+      <div className="movie-list4">
+        {movies.length > 0 ? (
+          <>
+            {movies.map((movie) => (
+              <div key={movie.id} className="movie-item4">
+                {/* Link wrapping only the image */}
+                <Link to={`/movie/${movie.id}`} className="movie-item-link4">
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                  />
+                </Link>
+                
                 <div className="info-movie4">
                   <div className="info-row4">
                     <p><i className="bi bi-star-fill"></i> {formatStar(movie.vote_average)}</p>
@@ -107,21 +125,37 @@ function Action() {
                   </div>
                   <div className="mov-title4">
                     <h4>{movie.title}</h4>
+
+                    <div className="bookmark-button">
+                      <button onClick={(e) => {
+                        e.stopPropagation(); 
+                        toggleSaveMovie(movie.id);
+                      }} className="bookmark-btn">
+                        {isSaved(movie.id) ? (
+                          <i className="bi bi-bookmark-fill"></i> 
+                        ) : (
+                          <i className="bi bi-bookmark"></i>
+                        )}
+                      </button>
+                    </div>
                   </div>
+                  
+                  {/* Link wrapping only the See more button */}
                   <div className="for-button4">
-                    <button><i className="bi bi-eye"></i> See more</button>
+                    <Link to={`/movie/${movie.id}`}>
+                      <button><i className="bi bi-eye"></i> See more</button>
+                    </Link>
                   </div>
                 </div>
               </div>
-            </Link>
-          ))}
-        </>
-      ) : (
-        <p>Loading movies...</p>
-      )}
-    </div>
+            ))}
+          </>
+        ) : (
+          <p>Loading movies...</p>
+        )}
+      </div>
 
-    {renderPagination()}
+      {renderPagination()}
     </div>
   );
 }
