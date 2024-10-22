@@ -2928,7 +2928,7 @@ body{
   .movie-list2{
     background-color: #242428;
     margin-top: 750px;
-    margin-left: 38px;
+    margin-left: 50px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     flex-wrap: wrap;
@@ -2938,7 +2938,7 @@ body{
   .movie-list5{
     background-color: #242428;
     margin-top: 750px;
-    margin-left: 38px;
+    margin-left: 50px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     flex-wrap: wrap;
