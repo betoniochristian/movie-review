@@ -2391,7 +2391,7 @@ body{
   
   .movie-info {
     position: absolute;
-    bottom: 180px;
+    bottom: 145px;
     left: 5px;
     right: 5px;
     color: white;
@@ -2455,7 +2455,7 @@ body{
   .trending-video{
     display: flex;
     flex-direction: column;
-    margin-top: 650px;
+    margin-top: 520px;
     width: 100%;
   }
   .trending-container{
@@ -2488,7 +2488,7 @@ body{
   }
   .about{
     text-align: justify;
-    width: 1400px;
+    width: 1100px;
     font-size: 20px;
     color: white;
   } 
